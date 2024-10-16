@@ -23,10 +23,3 @@ def check_if_token_revoked(jwt_header, jwt_payload):
     return jti in blacklist
 
 app.register_blueprint(auth)
-# app.register_blueprint(document_types)
-# app.register_blueprint(membership)
-# app.register_blueprint(roles)
-# app.register_blueprint(administrator)
-# app.register_blueprint(symptoms)
-# app.register_blueprint(sub_symptoms)
-# app.register_blueprint(appointments)

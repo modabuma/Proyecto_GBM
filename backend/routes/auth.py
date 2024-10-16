@@ -86,7 +86,34 @@ def getUsers(session, payload) -> dict:
     
     return jsonify(
         {
-            "message": "Registro exitoso.",
+            "message": "Servicio exitoso.",
             "data" : json.loads(str(response))
         }
     )
+
+@auth.post("/registerRest")
+@load_data
+def registerRest(session, payload) -> dict:
+    auth_controller = AuthController(session)
+    
+    auth_controller.registerRest(payload)
+    
+    return jsonify(
+        {
+            "message": "Registro exitoso.",
+        }
+    ), 201
+
+@auth.get("/generateExcel")
+@load_data
+def generateExcel(session) -> dict:
+    auth_controller = AuthController(session)
+    
+    response = auth_controller.generateExcel()
+    
+    return jsonify(
+        {
+            "message": "Reporte generado exitosamente.",
+            "data": response
+        }
+    ), 200

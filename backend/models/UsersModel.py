@@ -19,10 +19,11 @@ class UsersModel(QueriesMixin, base):
     password = Column(Text, nullable=False)
     name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
+    role = Column(TINYINT, nullable=False)
+    admin = Column(Integer, nullable=False)
     active = Column(TINYINT, nullable=False, default=1)
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
     updated_at = Column(TIMESTAMP, server_default=func.current_timestamp(), onupdate=func.current_timestamp())
-    role = Column(TINYINT, nullable=False)
     
     def __init__(self, payload: dict = {}):
         self.email = payload.get("email", "")
@@ -47,13 +48,19 @@ class UsersModel(QueriesMixin, base):
                 "active": self.active,
                 "name": self.name,
                 "last_name": self.last_name,
+                "role" : self.role,
+                "admin" : self.admin,
                 "created_at": str(self.created_at),
-                "updated_at": str(self.updated_at),
-                "role" : self.role
+                "updated_at": str(self.updated_at)
             }
         )
     
     def get_data_diff(self, session: sessionmaker) -> any:
         
         return getattr(
-            session.query(self.__class__).filter(self.__class__.role != 1 ), "all")()    
+            session.query(self.__class__).filter(self.__class__.role != 1 ), "all")()
+    
+    def get_data_in(self, ids: list, session: sessionmaker) -> any:
+        
+        return getattr(
+            session.query(self.__class__).filter(self.__class__.id.in_(ids)), "all")()    
